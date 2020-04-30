@@ -9,6 +9,9 @@
 
     https://github.com/uBlock-user/uBO-Scriptlets/blob/master/scriptlets.js
     https://raw.githubusercontent.com/uBlock-user/uBO-Scriptlets/master/scriptlets.js
+    
+    https://github.com/whileloopa/uBO-Scriptlets/blob/master/resources_my.js
+    https://raw.githubusercontent.com/whileloopa/uBO-Scriptlets/master/resources_my.js
 
     https://www.dropbox.com/s/rqnyd24mgwpm31i/resources_my.js?dl=0
     https://dl.dropboxusercontent.com/s/rqnyd24mgwpm31i/resources_my.js
