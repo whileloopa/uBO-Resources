@@ -25,6 +25,27 @@
     console.log('>>> Scriptlets injected: ' + needle);
 })();
 
+
+// Set lang attribute of <html> element if not exist
+// +js(my-setlang-if-undefined, language)
+/// my-setlang-if-undefined.js
+(function () {
+    let language = '{{1}}';
+    console.log('>>> my-setlang-if-undefined.js: ' + language);
+    document.documentElement.setAttribute('lang', language)
+})();
+
+// +js(my-no-google-translate)
+/// my-no-google-translate.js
+(function () {
+    console.log('>>> my-no-google-translate.js');
+    let meta = document.createElement('meta');
+    meta.name = 'google';
+    meta.content = 'notranslate';
+    document.head.appendChild(meta);
+})();
+
+
 // Bypass document.write and document.writeln if pattern match
 // +js(my-nowrite-if, pattern)
 /// my-nowrite-if.js
