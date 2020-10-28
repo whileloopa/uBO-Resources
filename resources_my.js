@@ -14,7 +14,7 @@
     https://raw.githubusercontent.com/whileloopa/uBO-Resources/master/resources_my.js
 
     https://www.dropbox.com/s/rqnyd24mgwpm31i/resources_my.js?dl=0
-    https://dl.dropboxusercontent.com/s/rqnyd24mgwpm31i/resources_my.js
+    https://dl.dropboxusercontent.com/s/rqnyd24mgwpm31i/resources_my.js?dl=0
 */
 
 "use strict";
@@ -23,6 +23,8 @@
 (function () {
     let needle = '{{1}}';
     console.log('>>> Scriptlets injected: ' + needle);
+    console.log('>>> self === window ?', self === window);
+    console.log(eval(needle));
 })();
 
 
@@ -45,6 +47,12 @@
     document.head.appendChild(meta);
 })();
 
+// Force addEventListener option
+// +js(my-listener-option-of, target, event, handler, force)
+/// my-listener-option-of
+(function () {
+    
+})();
 
 // Bypass document.write and document.writeln if pattern match
 // +js(my-nowrite-if, pattern)
