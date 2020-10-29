@@ -50,7 +50,7 @@
 
 // Force passiveness (default false) of event listener if pattern match
 // +js(my-event-passiveness-if, [eventType], [handler], [passiveness])
-/// my-event-passiveness-if
+/// my-event-passiveness-if.js
 (function () {
     let needle1 = '{{1}}';
     if ( needle1 === '' || needle1 === '{{1}}' ) {
