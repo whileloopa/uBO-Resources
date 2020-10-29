@@ -70,6 +70,7 @@
     }
     needle2 = new RegExp(needle2);
 	let passiveness = '{{3}}';
+	console.log('>>> my-event-passiveness:', needle1, needle2, passiveness);
 
 	let proxy = new Proxy( self.EventTarget.prototype.addEventListener, {
         apply: function(target, thisArg, args) {
@@ -91,7 +92,6 @@
         }
     });
 	self.EventTarget.prototype.addEventListener = proxy;
-	console.log('>>> my-event-passiveness:', needle1, needle2, passiveness);
 })();
 
 
