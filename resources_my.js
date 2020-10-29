@@ -47,12 +47,51 @@
     document.head.appendChild(meta);
 })();
 
-// Force addEventListener option
-// +js(my-listener-option-of, target, event, handler, force)
-/// my-listener-option-of
+
+// Force passiveness (default false) of event listener if pattern match
+// +js(my-event-passiveness-if, [eventType], [handler], [passiveness])
+/// my-event-passiveness-if
 (function () {
-    
+    let needle1 = '{{1}}';
+    if ( needle1 === '' || needle1 === '{{1}}' ) {
+        needle1 = '.*';
+    } else if ( needle1.startsWith('/') && needle1.endsWith('/') ) {
+        needle1 = needle1.slice(1,-1);
+    }
+	needle1 = '^(' + needle1 + ')$';
+    needle1 = new RegExp(needle1);
+    let needle2 = '{{2}}';
+    if ( needle2 === '' || needle2 === '{{2}}' ) {
+        needle2 = '.?';
+    } else if ( needle2.startsWith('/') && needle2.endsWith('/') ) {
+        needle2 = needle2.slice(1,-1);
+    } else {
+        needle2 = needle2.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    }
+    needle2 = new RegExp(needle2);
+	let passiveness = '{{3}}';
+
+	let proxy = new Proxy( self.EventTarget.prototype.addEventListener, {
+        apply: function(target, thisArg, args) {
+            const type = args[0].toString();
+            const handler = String(args[1]);
+			let options = args[2] ?? {};
+			if (typeof options === 'boolean') {
+				options = {capture: options};
+			}
+            if (typeof options !== 'object') {
+                return Reflect.apply(...arguments);
+            }
+			if (needle1.test(type) && needle2.test(handler)) {
+				options.passive = ({true:true, false:false})[passiveness] ?? false;
+			}
+			args[2] = options;
+			return Reflect.apply(...arguments);
+        }
+    });
+	self.EventTarget.prototype.addEventListener = proxy;
 })();
+
 
 // Bypass document.write and document.writeln if pattern match
 // +js(my-nowrite-if, pattern)
