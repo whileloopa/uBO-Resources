@@ -1,5 +1,6 @@
 /*
     The scriptlets below are meant to be injected only into a web page context.
+    Don't left empty line inside scriptlet, it will be truncated at empty line.
 
     https://github.com/gorhill/uBlock/blob/master/assets/resources/scriptlets.js
     https://raw.githubusercontent.com/gorhill/uBlock/master/assets/resources/scriptlets.js
@@ -58,7 +59,7 @@
     } else if ( needle1.startsWith('/') && needle1.endsWith('/') ) {
         needle1 = needle1.slice(1,-1);
     }
-	needle1 = '^(' + needle1 + ')$';
+    needle1 = '^(' + needle1 + ')$';
     needle1 = new RegExp(needle1);
     let needle2 = '{{2}}';
     if ( needle2 === '' || needle2 === '{{2}}' ) {
@@ -69,31 +70,53 @@
         needle2 = needle2.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     }
     needle2 = new RegExp(needle2);
-	let passiveness = '{{3}}';
-	console.log('>>> my-event-passiveness:', needle1, needle2, passiveness);
-
-	let proxy = new Proxy( self.EventTarget.prototype.addEventListener, {
+    let passiveness = '{{3}}';
+    console.log('>>> my-event-passiveness:', needle1, needle2, passiveness);
+    let proxy = new Proxy( self.EventTarget.prototype.addEventListener, {
         apply: function(target, thisArg, args) {
             const type = args[0].toString();
             const handler = String(args[1]);
-			let options = args[2] ?? {};
-			if (typeof options === 'boolean') {
-				options = {capture: options};
-			}
+            let options = args[2] ?? {};
+            if (typeof options === 'boolean') {
+                options = {capture: options};
+            }
             if (typeof options !== 'object') {
                 return Reflect.apply(...arguments);
             }
-			if (needle1.test(type) && needle2.test(handler)) {
-				options.passive = ({true:true, false:false})[passiveness] ?? false;
-			}
-			args[2] = options;
-		    console.log('>>> my-event-passiveness: ' + args[2]);
-			return Reflect.apply(...arguments);
+            if (needle1.test(type) && needle2.test(handler)) {
+                options.passive = ({true:true, false:false})[passiveness] ?? false;
+            }
+            args[2] = options;
+            if(args[2].passive === false) console.log('>>> my-event-passiveness: ', type);
+            return Reflect.apply(...arguments);
         }
     });
-	self.EventTarget.prototype.addEventListener = proxy;
+    self.EventTarget.prototype.addEventListener = proxy;
 })();
 
+/// my-ac.qq.com-fix.js
+(function () {
+	let wheelScroll = window.onmousewheel;
+	Object.defineProperty(window, "onmousewheel", {
+	  get(){ return this._onmousewheel; },
+	  set(func){ if(typeof this._onmousewheel === 'function') this.removeEventListener('mousewheel', this._onmousewheel);
+		if(typeof func === 'function') this.addEventListener('mousewheel', func, {passive:false});
+		this._onmousewheel = func;
+	  },
+	  enumerable: true,
+	  configurable: true
+	});
+	Object.defineProperty(document, "onmousewheel", {
+	  get(){ return this._onmousewheel; },
+	  set(func){ if(typeof this._onmousewheel === 'function') this.removeEventListener('mousewheel', this._onmousewheel);
+		if(typeof func === 'function') this.addEventListener('mousewheel', func, {passive:false});
+		this._onmousewheel = func;
+	  },
+	  enumerable: true,
+	  configurable: true
+	});
+	window.onmousewheel = document.onmousewheel = wheelScroll;
+})();
 
 // Bypass document.write and document.writeln if pattern match
 // +js(my-nowrite-if, pattern)
@@ -206,7 +229,6 @@
     let parentAttributeList = '{{2}}';
     childAttributeList = childAttributeList ? childAttributeList.split(';;') : [];
     parentAttributeList = parentAttributeList ? parentAttributeList.split(';;') : [];
-    
     for (let attr, needle, i=0; i<childAttributeList.length; i++) {
         [attr, needle] = childAttributeList[i].split('@@');
         if (needle.startsWith('/') && needle.endsWith('/')) {
@@ -221,7 +243,6 @@
         }
         parentAttributeList[i] = [attr, needle];
     }
-
     Node.prototype.appendChild = new Proxy(Node.prototype.appendChild, {
         apply: function (appendChild, thisArg, args) {
             const child = args[0], parent = thisArg;
@@ -277,7 +298,6 @@
     let parentAttributeList = '{{2}}';
     childAttributeList = childAttributeList ? childAttributeList.split(';;') : [];
     parentAttributeList = parentAttributeList ? parentAttributeList.split(';;') : [];
-    
     for (let attr, needle, i=0; i<childAttributeList.length; i++) {
         [attr, needle] = childAttributeList[i].split('@@');
         if (needle.startsWith('/') && needle.endsWith('/')) {
@@ -292,7 +312,6 @@
         }
         parentAttributeList[i] = [attr, needle];
     }
-
     Node.prototype.insertBefore = new Proxy(Node.prototype.insertBefore, {
         apply: function (insertBefore, thisArg, args) {
             const child = args[0], parent = thisArg;
