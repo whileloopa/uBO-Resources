@@ -86,6 +86,7 @@
 				options.passive = ({true:true, false:false})[passiveness] ?? false;
 			}
 			args[2] = options;
+		    console.log('>>> my-event-passiveness: ' + args[2]);
 			return Reflect.apply(...arguments);
         }
     });
