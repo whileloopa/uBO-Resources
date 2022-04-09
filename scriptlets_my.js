@@ -14,8 +14,14 @@
     https://github.com/whileloopa/uBO-Resources/blob/master/resources_my.js
     https://raw.githubusercontent.com/whileloopa/uBO-Resources/master/resources_my.js
 
+    https://github.com/whileloopa/uBO-Resources/blob/master/scriptlets_my.js
+    https://raw.githubusercontent.com/whileloopa/uBO-Resources/master/scriptlets_my.js
+
     https://www.dropbox.com/s/rqnyd24mgwpm31i/resources_my.js?dl=0
     https://dl.dropboxusercontent.com/s/rqnyd24mgwpm31i/resources_my.js?dl=0
+
+	https://www.dropbox.com/s/nj09ffwjkd5hg4m/scriptlets_my.js?dl=0
+	https://dl.dropboxusercontent.com/s/nj09ffwjkd5hg4m/scriptlets_my.js?dl=0
 
 	Modified: 2022-04-10
 */
